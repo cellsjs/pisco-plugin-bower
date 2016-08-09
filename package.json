@@ -4,8 +4,7 @@
   "description": "Pisco plugin for bower",
   "main": "plugins/render/plugin.js",
   "scripts": {
-    "deps": "npm install",
-    "test": "node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha"
+    "deps": "npm install"
   },
   "keywords": [
     "piscosour-recipe",
@@ -18,10 +17,5 @@
   },
   "dependencies": {
     "piscosour": "^1.0.0-alpha.4"
-  },
-  "devDependencies": {
-    "chai": "^3.5.0",
-    "istanbul": "^0.4.3",
-    "mocha": "^2.5.3"
   }
 }
