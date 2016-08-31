@@ -2,10 +2,11 @@
 
 module.exports = {
   run: function(ok, ko) {
-    const _bowerInstall = (_ok, _ko) => {
+    let result;
+    const _executeBower = (command, _ok, _ko) => {
       // bower install by default
-      this.logger.info('#white', 'bower install');
-      let args = [ 'install' ];
+      this.logger.info('#white', `bower ${command}`);
+      let args = [ command ];
 
       // Save dependencies option
       if (this.params.bower.save === 'save') {
@@ -23,12 +24,22 @@ module.exports = {
       if (this.params.bower.offline) {
         args.push('--offline');
       }
+
+      // json option
+      if (this.params.bower.json) {
+        args.push('--json');
+      }
+
       this.logger.info('#blue', 'bower args', args);
-      this.executeSync('bower', args, _ko, true);
+      return this.executeSync('bower', args, _ko, false);
     };
 
     if (this.params.bower.install) {
-      _bowerInstall(ko, ok);
+      result = _executeBower('install', ko, ok);
+    } else if (this.params.bower.list) {
+      result = _executeBower('list', ko, ok);
     }
+
+    this.params.bower.result = result.stdout.toString();
   }
 };
