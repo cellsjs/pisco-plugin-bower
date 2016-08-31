@@ -1,8 +1,10 @@
 # Bower plugin
 
-Install bower dependencies
+Executes bower commands
 
-## Arguments
+## Bower install
+
+### Arguments
 ```
 {
   "bower": {
@@ -14,17 +16,41 @@ Install bower dependencies
 }
 ```
 
-### Required arguments:
+#### Required arguments:
 ```install``` Is __REQUIRED__ to activate the plugin.
 
-### Optional arguments:
+#### Optional arguments:
 ```save``` Accepts values __```save```__ for ```--save``` or __```saveDev```__ for ```--save-dev```
 
 ```forceLatest``` Set to __```true```__ for ```--save```
 
 ```offline```Set to __```true```__ for ```--force-latest```
 
-## Example
+## Bower list
+
+### Arguments
+```
+{
+  "bower": {
+    "list": true,
+    "offline": true,
+    "json": true
+  }
+}
+```
+
+#### Required arguments:
+```list``` Is __REQUIRED__ to activate the plugin.
+
+#### Optional arguments:
+```offline```Set to __```true```__ for ```--force-latest```
+```json```Set to __```true```__ for ```--json```
+
+### Output:
+The result of the execution is stored in ```this.params.bower.result```
+
+
+### Examples
 ```
 {
   "bower": {
@@ -34,3 +60,14 @@ Install bower dependencies
 }
 ```
 This will make a ```bower install --force-latest```
+
+```
+{
+  "bower": {
+    "list": true,
+    "offline": true,
+    "json": true
+  }
+}
+```
+This will make a ```bower list --json --offline```
