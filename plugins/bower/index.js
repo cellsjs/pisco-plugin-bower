@@ -31,7 +31,7 @@ module.exports = {
       }
 
       this.logger.info('#blue', 'bower args', args);
-      return this.executeSync('bower', args, _ko, true);
+      return this.executeSync('bower', args, _ko, false);
     };
 
     if (this.params.bower.install) {
