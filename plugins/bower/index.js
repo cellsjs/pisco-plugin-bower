@@ -1,6 +1,15 @@
 'use strict';
 
 module.exports = {
+
+  check: function() {
+    this.params.bower = this.params.bower ? this.params.bower : {};
+    if (this.params.dependenciesInstalled) {
+      return this.bowerInstall();
+    }
+  },
+
+  /*
   run: function(ok, ko) {
     let result;
     const _executeBower = (command, _ok, _ko) => {
@@ -41,5 +50,41 @@ module.exports = {
     }
 
     this.params.bower.result = result.stdout.toString();
+  },
+*/
+  addons: {
+    _bowerPre() {
+      const isBaseDir = this.params.bower.baseDir && this.fsExists(this.params.bower.baseDir);
+      if (isBaseDir) {
+        process.cwd(this.params.bower.baseDir);
+      }
+    },
+    _bowerPost() {
+      const isBaseDir = this.params.bower.baseDir && this.fsExists(this.params.bower.baseDir);
+      if (isBaseDir) {
+        process.cwd(this.params.bower.baseDir);
+      }
+    },
+    bowerDirectory() {
+      return this.params.bower.directory ? this.params.bower.directory : 'bower_components';
+    },
+    bowerIsInstalled() {
+      this._bowerPre();
+      const result = this.fsExists(this.bowerDirectory());
+      this._bowerPost();
+      return result;
+    },
+    bowerInstall() {
+      if (!this.bowerIsInstalled() || this.params.bower.forceReinstall) {
+        this._bowerPre();
+        const args = [ 'install' ];
+        if (this.params.bower.forceLatest !== false) {
+          args.push('-F');
+        }
+        return this.execute('bower', args)
+          .then(() => this._bowerPost());
+      }
+    }
   }
+
 };
