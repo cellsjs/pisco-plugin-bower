@@ -53,16 +53,17 @@ module.exports = {
   },
 */
   addons: {
+    bowerIsBaseDir() {
+      return this.params.bower.baseDir && this.fsExists(this.params.bower.baseDir);
+    },
     _bowerPre() {
-      const isBaseDir = this.params.bower.baseDir && this.fsExists(this.params.bower.baseDir);
-      if (isBaseDir) {
+      if (this.bowerIsBaseDir()) {
         process.cwd(this.params.bower.baseDir);
       }
     },
     _bowerPost() {
-      const isBaseDir = this.params.bower.baseDir && this.fsExists(this.params.bower.baseDir);
-      if (isBaseDir) {
-        process.cwd(this.params.bower.baseDir);
+      if (this.bowerIsBaseDir()) {
+        process.cwd(this.params.workingDir);
       }
     },
     bowerDirectory() {
