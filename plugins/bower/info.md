@@ -1,73 +1,87 @@
-# Bower plugin
+Bower commands wrapper for pisco
 
-Executes bower commands
+### Hook (stage: check)
 
-## Bower install
+Any step can ensure that **bower install** or **bower update** are correctly executed:
 
-### Arguments
+#### 1. Install plugin in your recipe 
+ 
+ **Add package dependency**:
+ 
+    npm install pisco-plugin-bower --save
+ 
+ **Add plugin on steps/$stepName/config.json plugins**:
+ 
 ```
 {
-  "bower": {
-    "install": true,
-    "save": ["save" / "saveDev"],
-    "forceLatest": true,
-    "offline": true
+  "plugins": [
+    [...]
+    "bower" 
+  ]
+}
+```
+
+#### 2. Add bower requirement to Step
+
+```
+{
+  "requirements": {
+    [...]
+    "bower": {}
   }
 }
 ```
 
-#### Required arguments:
-```install``` Is __REQUIRED__ to activate the plugin.
 
-#### Optional arguments:
-```save``` Accepts values __```save```__ for ```--save``` or __```saveDev```__ for ```--save-dev```
+#### 3. Configure plugin in config.json of your step
 
-```forceLatest``` Set to __```true```__ for ```--save```
-
-```offline```Set to __```true```__ for ```--force-latest```
-
-## Bower list
-
-### Arguments
-```
-{
-  "bower": {
-    "list": true,
-    "offline": true,
-    "json": true
-  }
-}
-```
-
-#### Required arguments:
-```list``` Is __REQUIRED__ to activate the plugin.
-
-#### Optional arguments:
-```offline```Set to __```true```__ for ```--force-latest```
-```json```Set to __```true```__ for ```--json```
-
-### Output:
-The result of the execution is stored in ```this.params.bower.result```
-
-
-### Examples
-```
-{
-  "bower": {
-    "install": true,
-    "forceLatest": true
-  }
-}
-```
-This will make a ```bower install --force-latest```
 
 ```
 {
   "bower": {
-    "list": true,
-    "offline": true,
-    "json": true
+    "installed": true,
+    "updated": true,
+    "forceLatest": false, (default is true)
+    "baseDir" : "any", (default is '.') 
+    "directory" : "bower_components" (default is 'bower_components')
   }
 }
 ```
-This will make a ```bower list --json --offline```
+
+  - **installed** _(default: false)_ Ensure that bower install is executed if ${bower.directory} doesn't exists execute bower install.
+  - **updated** _(default: false)_ Ensure that `bower update` and `bower prune` are executed. Detect if there are symbolics links and ask user to delete 
+  - **forceLatest** _(default: true)_ append --force-latest (-F) to bower install or bower update command.
+  - **directory** _(default: 'bower_components')_ must to be the same value of `directory` in .bowerrc file.
+  - **baseDir** _(default: '.')_ path to bower.json file relative.
+  
+#### Examples:
+ 
+Normal use, ensure bower install was executed:
+
+```
+{
+  "bower": {
+    "installed": true
+  }
+}
+```
+
+Check if there are symbolics links and ask user to update:
+
+```
+{
+  "bower": {
+    "updated": true
+  }
+}
+```
+
+### this.bowerList
+
+Execute **bower list ${opts}**
+
+| Param | Description |
+| --- | --- |
+| opts | array with command options to append to bower list for example [ '--offline', '--json' ]  |
+| returns | a Promise with the complete child_process object result of the execution |
+
