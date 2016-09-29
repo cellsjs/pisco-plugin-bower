@@ -7,10 +7,17 @@ module.exports = {
 
   check() {
     this.params.bower = this.params.bower ? this.params.bower : {};
-    if (this.params.bower.installed || this.params.bower.updated) {
+    this.params.stages = this.params.stages ? this.params.stages : [];
+    if ((this.params.bower.installed || this.params.bower.updated) && (this.params.stages.indexOf('check') >= 0) || this.params.stages.length === 0) {
       return this._bowerAction();
     }
   },
+  run() {
+    if ((this.params.bower.installed || this.params.bower.updated) && this.params.stages.indexOf('run') >= 0) {
+      return this._bowerAction();
+    }
+  },
+
   addons: {
     bowerList(params) {
       this._bowerPre();
