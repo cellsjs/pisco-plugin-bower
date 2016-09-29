@@ -1,7 +1,7 @@
 (manual copy of info.md of the plugin)
 Bower commands wrapper for pisco
 
-### Hook (stage: check)
+### Hook (stages: check, run)
 
 Any step can ensure that **bower install** or **bower update** are correctly executed:
 
@@ -55,6 +55,22 @@ Any step can ensure that **bower install** or **bower update** are correctly exe
   - **directory** _(default: 'bower_components')_ must to be the same value of `directory` in .bowerrc file.
   - **baseDir** _(default: '.')_ path to bower.json file relative.
   
+#### 4. Configure the stages for the hook (could be check or run)
+
+**By default the hook is set on check stage**
+
+In config.json of your step
+ 
+```
+{
+  "stages" : ["check","run"],
+  "bower": {
+    [...]
+  }
+}
+```
+
+  
 #### Examples:
  
 Normal use, ensure bower install was executed:
@@ -85,3 +101,4 @@ Execute **bower list ${opts}**
 | --- | --- |
 | opts | array with command options to append to bower list for example [ '--offline', '--json' ]  |
 | returns | a Promise with the complete child_process object result of the execution |
+
