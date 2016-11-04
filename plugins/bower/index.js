@@ -106,12 +106,12 @@ module.exports = {
     },
     _bowerPre() {
       if (this._bowerIsBaseDir()) {
-        process.cwd(this.params.bower.baseDir);
+        process.chdir(this.params.bower.baseDir);
       }
     },
     _bowerPost(result) {
       if (this._bowerIsBaseDir()) {
-        process.cwd(this.params.workingDir);
+        process.chdir(this.params.workingDir);
       }
       return result;
     },
