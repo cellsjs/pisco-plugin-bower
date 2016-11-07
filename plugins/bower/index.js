@@ -8,12 +8,17 @@ module.exports = {
   check() {
     this.params.bower = this.params.bower ? this.params.bower : {};
     this.params.stages = this.params.stages ? this.params.stages : [];
-    if ((this.params.bower.installed || this.params.bower.updated) && (this.params.stages.indexOf('check') >= 0) || this.params.stages.length === 0) {
+    if (this._bowerStage('check') || this.params.stages.length === 0) {
+      return this._bowerAction();
+    }
+  },
+  config() {
+    if (this._bowerStage('config')) {
       return this._bowerAction();
     }
   },
   run() {
-    if ((this.params.bower.installed || this.params.bower.updated) && this.params.stages.indexOf('run') >= 0) {
+    if (this._bowerStage('run')) {
       return this._bowerAction();
     }
   },
@@ -36,6 +41,9 @@ module.exports = {
       const result = this.fsExists(this.bowerDirectory());
       this._bowerPost();
       return result;
+    },
+    _bowerStage(stage) {
+      return (this.params.bower.installed || this.params.bower.updated) && this.params.stages.indexOf(stage) >= 0;
     },
     _bowerAction() {
       if (!this.bowerIsInstalled()) {
