@@ -1,6 +1,6 @@
 {
   "name": "pisco-plugin-bower",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "Pisco plugin for bower",
   "main": "plugins/render/plugin.js",
   "scripts": {
