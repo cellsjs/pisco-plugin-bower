@@ -105,13 +105,17 @@ module.exports = {
       return args;
     },
     _bowerPre() {
+      this.params.bower.baseDirPath = this.params.bower.baseDir
+        ? path.resolve(this.params.bower.baseDir)
+        : null;
       if (this._bowerIsBaseDir()) {
-        process.chdir(this.params.bower.baseDir);
+        this.params.bower.currentDirPath = path.resolve(process.cwd());
+        process.chdir(this.params.bower.baseDirPath);
       }
     },
     _bowerPost(result) {
-      if (this._bowerIsBaseDir()) {
-        process.chdir(this.params.workingDir);
+      if (this.params.bower.currentDirPath) {
+        process.chdir(this.params.bower.currentDirPath);
       }
       return result;
     },
@@ -131,7 +135,7 @@ module.exports = {
         .then(() => this._bowerPost());
     },
     _bowerIsBaseDir() {
-      return this.params.bower.baseDir && this.fsExists(this.params.bower.baseDir);
+      return this.params.bower.baseDirPath && this.fsExists(this.params.bower.baseDirPath);
     }
   }
 };
