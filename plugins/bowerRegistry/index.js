@@ -6,13 +6,13 @@ const path = require('path');
 module.exports = {
 
   check: function() {
-    if (this.params.stages.indexOf('check') >= 0) {
+    if (this.params.stages && this.params.stages.indexOf('check') >= 0) {
       return this._checkBower();
     }
   },
 
   run: function() {
-    if (this.params.stages.indexOf('run') >= 0) {
+    if (this.params.stages && this.params.stages.indexOf('run') >= 0) {
       return this._checkBower();
     }
   },
@@ -35,7 +35,7 @@ module.exports = {
       const names = this.checkNames(bower);
       if (names) {
         const command = this.sh(`bower register -f ${names.name} ${names.url}`);
-        this.logger.info('#cyan', names.name, '#grey', '( bower register ) ->', '#green', this.params.registryDomain, '-', command.status === 0 ? '#green' : '#red', command.status === 0 ? 'OK' : 'ERROR');
+        this.logger.info('#cyan', names.name, '#grey', '( bower register ) ->', '#green', this.params.registryDomain ? this.params.registryDomain : 'default', '-', command.status === 0 ? '#green' : '#red', command.status === 0 ? 'OK' : 'ERROR');
         this.logger.trace(command.stdout.toString(), command.stderr.toString());
         return command.status;
       }
