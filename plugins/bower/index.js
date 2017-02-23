@@ -173,6 +173,8 @@ module.exports = {
       if (this.params.bower.lockedInstall && this.fsExists(`_${shrinkwrapFile}`)) {
         fs.renameSync('bower.json', '_bower.json');
         fs.renameSync(`_${shrinkwrapFile}`, 'bower.json');
+      } else {
+        this.logger.warn('Is not possible to make a locked installation.', '#green', `_${shrinkwrapFile}`, 'not exists');
       }
     },
     _bowerPost(result) {
