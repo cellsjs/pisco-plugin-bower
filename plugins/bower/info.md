@@ -41,6 +41,8 @@ Any step can ensure that **bower install** or **bower update** are correctly exe
   "bower": {
     "installed": true,
     "updated": true,
+    "lockedInstall": false, ((default is false)
+    "production": true, (dafault is false)
     "forceLatest": false, (default is true)
     "baseDir" : "any", (default is '.') 
     "directory" : "bower_components" (default is 'bower_components')
@@ -49,10 +51,12 @@ Any step can ensure that **bower install** or **bower update** are correctly exe
 ```
 
   - **installed** _(default: false)_ Ensure that bower install is executed if ${bower.directory} doesn't exists execute bower install.
-  - **updated** _(default: false)_ Ensure that `bower update` and `bower prune` are executed. Detect if there are symbolics links and ask user to delete 
+  - **updated** _(default: false)_ Ensure that `bower update` and `bower prune` are executed. Detect if there are symbolics links and ask user to delete
+  - **lockedInstall** _(default: false)_ If true and _bower_shrinkwrap.json exists installation is locked at this file.
   - **forceLatest** _(default: true)_ append --force-latest (-F) to bower install or bower update command.
   - **directory** _(default: 'bower_components')_ must to be the same value of `directory` in .bowerrc file.
   - **baseDir** _(default: '.')_ path to bower.json file relative.
+  - **production** _(default: false)_ add -p to bower install command.
   
 #### 4. Configure the stages for the hook (could be check, config or run)
 
