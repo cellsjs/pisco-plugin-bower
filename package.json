@@ -1,6 +1,6 @@
 {
   "name": "pisco-plugin-bower",
-  "version": "0.3.9-rc.0",
+  "version": "0.3.9",
   "description": "Pisco plugin for bower",
   "scripts": {
     "deps": "npm install"
