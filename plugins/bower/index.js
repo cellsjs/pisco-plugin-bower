@@ -80,6 +80,10 @@ module.exports = {
         .then((result) => this._bowerPost(result));
     },
     bowerDirectory() {
+      if (this.fsExists('.bowerrc')) {
+        const bowerrc = this.fsReadConfig('.bowerrc');
+        this.params.bower.directory = bowerrc.directory;
+      }
       return this.params.bower.directory ? this.params.bower.directory : 'bower_components';
     },
     bowerIsInstalled() {
