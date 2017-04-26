@@ -1,6 +1,6 @@
 {
   "name": "pisco-plugin-bower",
-  "version": "0.3.11",
+  "version": "0.3.12",
   "dependencies": {
     "glob": {
       "version": "7.1.1",
