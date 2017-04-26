@@ -82,7 +82,7 @@ module.exports = {
     bowerDirectory() {
       if (this.fsExists('.bowerrc') && !this.params._bowerrc) {
         this.params._bowerrc = this.fsReadConfig('.bowerrc');
-        this.params.bower.directory = bowerrc.directory;
+        this.params.bower.directory = this.params._bowerrc.directory;
       }
       return this.params.bower.directory ? this.params.bower.directory : 'bower_components';
     },
