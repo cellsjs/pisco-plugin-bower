@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const glob = require('glob');
 const shrinkwrapFile = 'bower_shrinkwrap.json';
+const bowerFile = 'bower.json';
 
 module.exports = {
 
@@ -57,7 +58,7 @@ module.exports = {
       const promises = [];
       const dependencies = {};
       return new Promise((ok, ko) => {
-        glob(`${this.bowerDirectory()}/**/.bower.json`, {}, (er, files) => {
+        glob(`${this.bowerDirectory()}/**/.${bowerFile}`, {}, (er, files) => {
           files.forEach((file) => {
             promises.push(this._bowerReadDep(file, dependencies));
           });
@@ -65,7 +66,7 @@ module.exports = {
         });
       })
       .then(() => {
-        const bower = this.fsReadConfig('bower.json');
+        const bower = this.fsReadConfig(bowerFile);
         bower.dependencies = dependencies;
         fs.writeFileSync(shrinkwrapFile, JSON.stringify(bower, null, 2));
       });
@@ -96,16 +97,20 @@ module.exports = {
       return (this.params.bower.installed || this.params.bower.updated) && this.params.stages.indexOf(stage) >= 0;
     },
     _bowerAction() {
-      if (!this.bowerIsInstalled()) {
-        this.logger.info('Bower', '#green', 'installing', '...');
-        return this._bowerInstall();
-      } else if (this.params.bower.updated) {
-        this.logger.info('Bower', '#green', 'updating', '...');
-        return this._bowerAreSymbolicLinks()
-          .then((result) => this._bowerCheckIfUpdate(result));
+      if (this.fsExists(bowerFile)) {
+        if (!this.bowerIsInstalled()) {
+          this.logger.info('Bower', '#green', 'installing', '...');
+          return this._bowerInstall();
+        } else if (this.params.bower.updated) {
+          this.logger.info('Bower', '#green', 'updating', '...');
+          return this._bowerAreSymbolicLinks()
+            .then((result) => this._bowerCheckIfUpdate(result));
+        } else {
+          this.logger.info('Bower installed:', '#green', 'OK');
+          return Promise.resolve();
+        }
       } else {
-        this.logger.info('Bower installed:', '#green', 'OK');
-        return Promise.resolve();
+        this.logger.info(`${bowerFile} is`, '#yellow', 'not found', '->', '#yellow', 'NOT INSTALLED');
       }
     },
     _bowerInstall() {
@@ -176,8 +181,8 @@ module.exports = {
       }
       if (this.params.bower.lockedInstall) {
         if (this.fsExists(`_${shrinkwrapFile}`)) {
-          fs.renameSync('bower.json', '_bower.json');
-          fs.renameSync(`_${shrinkwrapFile}`, 'bower.json');
+          fs.renameSync(bowerFile, `_${bowerFile}`);
+          fs.renameSync(`_${shrinkwrapFile}`, bowerFile);
         } else {
           this.logger.warn('Is not possible to make a locked installation.', '#green', `_${shrinkwrapFile}`, 'do not exists');
         }
@@ -187,9 +192,9 @@ module.exports = {
       if (this._bowerIsBaseDir()) {
         process.chdir(this.params._origAbsDir);
       }
-      if (this.params.bower.lockedInstall && this.fsExists('_bower.json')) {
-        fs.renameSync('bower.json', `_${shrinkwrapFile}`);
-        fs.renameSync('_bower.json', 'bower.json');
+      if (this.params.bower.lockedInstall && this.fsExists(`_${bowerFile}`)) {
+        fs.renameSync(bowerFile, `_${shrinkwrapFile}`);
+        fs.renameSync(`_${bowerFile}`, bowerFile);
       }
       return result;
     },
